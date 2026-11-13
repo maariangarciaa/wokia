@@ -1,0 +1,14 @@
+envs/*.env
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+frontend/node_modules/
+frontend/dist/
+.vscode/
+auto_doc/files/
+auto_doc/metadata/

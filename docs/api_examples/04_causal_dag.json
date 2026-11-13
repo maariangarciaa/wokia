@@ -1,0 +1,6 @@
+{
+  "outcome": "PriceEuro",
+  "treatment": "treatment",
+  "treatment_code": "df[\"treatment\"] = (df[\"TopSpeed_KmH\"] > 200).astype(int)\ndf = df.drop(columns=[\"TopSpeed_KmH\"])",
+  "use_agent": true
+}

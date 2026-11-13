@@ -1,0 +1,4 @@
+{
+  "hipotesis": "Los vehiculos cuya velocidad maxima supera los 200 km/h (`TopSpeed_KmH`) tienden a tener precios mas altos (`PriceEuro`).",
+  "apply_code": true
+}

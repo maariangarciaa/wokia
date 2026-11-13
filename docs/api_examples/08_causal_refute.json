@@ -1,0 +1,8 @@
+{
+  "outcome": "PriceEuro",
+  "treatment": "treatment",
+  "treatment_code": "df[\"treatment\"] = (df[\"TopSpeed_KmH\"] > 200).astype(int)\ndf = df.drop(columns=[\"TopSpeed_KmH\"])",
+  "dot": "digraph {\nnode [shape=ellipse, style=filled, fontcolor=black];\n\"treatment\" [fillcolor=\"#B7F7B1\", color=\"#2E7D32\", penwidth=2];\n\"PriceEuro\" [fillcolor=\"#D9D9D9\", color=\"#666666\", penwidth=2];\n\"Brand\" [fillcolor=\"#FFA500\", color=\"#A65F00\"];\n\"FastCharge_KmH\" [fillcolor=\"#FFA500\", color=\"#A65F00\"];\n\"PowerTrain\" [fillcolor=\"#FFA500\", color=\"#A65F00\"];\n\"BodyStyle\" [fillcolor=\"#FFA500\", color=\"#A65F00\"];\n\"Segment\" [fillcolor=\"#FFA500\", color=\"#A65F00\"];\n\"Range_Km\" [fillcolor=\"#B7E3EF\", color=\"#4F94A8\"];\n\"Efficiency_WhKm\" [fillcolor=\"#B7E3EF\", color=\"#4F94A8\"];\n\"Seats\" [fillcolor=\"#B7E3EF\", color=\"#4F94A8\"];\n\"AccelSec\" [fillcolor=\"#B7E3EF\", color=\"#4F94A8\"];\n\"treatment\" -> \"PriceEuro\";\n\"Brand\" -> \"treatment\";\n\"Brand\" -> \"PriceEuro\";\n\"FastCharge_KmH\" -> \"treatment\";\n\"FastCharge_KmH\" -> \"PriceEuro\";\n\"PowerTrain\" -> \"treatment\";\n\"PowerTrain\" -> \"PriceEuro\";\n\"BodyStyle\" -> \"treatment\";\n\"BodyStyle\" -> \"PriceEuro\";\n\"Segment\" -> \"treatment\";\n\"Segment\" -> \"PriceEuro\";\n\"treatment\" -> \"Range_Km\";\n\"Range_Km\" -> \"PriceEuro\";\n\"treatment\" -> \"Efficiency_WhKm\";\n\"Efficiency_WhKm\" -> \"PriceEuro\";\n\"treatment\" -> \"Seats\";\n\"Seats\" -> \"PriceEuro\";\n\"treatment\" -> \"AccelSec\";\n\"AccelSec\" -> \"PriceEuro\";\n}",
+  "metodo": "backdoor.linear_regression",
+  "use_agent": true
+}
