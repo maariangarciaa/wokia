@@ -169,6 +169,6 @@ La aplicacion ejecuta codigo Python generado por el modelo y admite codigo en al
 
 ## Wokia en acción
 
-[![Ver demostración de Wokia](docs/images/wokia-demo.png)](PEGA_AQUI_EL_ENLACE_DEL_VIDEO)
+[![Ver demostración de Wokia](docs/images/wokia-demo.png)](https://github.com/user-attachments/assets/b3962a7c-1403-4aeb-af66-5e688cfbdc14)
 
 Haz clic en la imagen para ver la demostración.
