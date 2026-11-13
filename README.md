@@ -1,100 +1,61 @@
 # Wokia
 
-Mini workbench de analisis de datos con asistencia LLM. Wokia permite cargar datasets tabulares, revisar su calidad, generar visualizaciones con lenguaje natural y explorar un flujo guiado de inferencia causal.
+**Tu espacio para explorar datos con criterio.**
 
-El proyecto incluye una interfaz React conectada a una API FastAPI y conserva la version anterior en Streamlit.
+Wokia nació como mi Trabajo de Fin de Grado. La idea era crear una especie de pequeño asistente de ciencia de datos que me ayudara a dar los primeros pasos con un dataset desconocido: entender qué contiene, detectar posibles problemas y empezar a hacer preguntas.
 
-## Funcionalidades
+Después del TFG seguí trabajando en el proyecto y añadí una interfaz con React y una API con FastAPI. Esta es la versión actual.
 
-- Carga de archivos CSV y Excel.
-- Resumen estadistico asistido.
-- Revision de nulos, duplicados, tipos de variables y primeras senales de calidad.
-- Generacion de graficos a partir de instrucciones en lenguaje natural.
-- Flujo de causalidad con seleccion de tratamiento, DAG, identificabilidad, estimacion y validacion de robustez.
-- Soporte para proveedores LLM por API key: Groq o Gemini.
+## Wokia en acción
 
-## Requisitos
+[![Vista de Wokia](docs/images/wokia-demo.png)](https://github.com/user-attachments/assets/b3962a7c-1403-4aeb-af66-5e688cfbdc14)
 
-- Python 3.12 recomendado.
-- Node.js y npm para ejecutar la interfaz React.
-- Una API key de Groq o Gemini.
+## ¿Qué se puede hacer?
 
-## Instalacion
+- **Conocer los datos:** cargar un CSV o Excel y revisar una muestra de sus primeras filas.
+- **Explorar el dataset:** pedir al asistente que analice su estructura, columnas, valores nulos, duplicados, correlaciones y posibles valores extremos. También puede proponer nuevas variables y una variable objetivo.
+- **Crear gráficos:** describir lo que quieres visualizar con una frase y descargar el resultado en PNG.
+- **Plantear un análisis causal:** partir de una pregunta o elegir un tratamiento manualmente, revisar y editar el DAG, y continuar con la identificación, estimación y comprobación de robustez.
 
-1. Crea y activa un entorno virtual:
+El asistente utiliza un modelo de lenguaje mediante la API de Groq o Gemini. Algunas tareas del flujo causal también utilizan DoWhy.
+
+## Cómo probar Wokia
+
+Estas instrucciones están pensadas para Windows con PowerShell.
+
+### 1. Preparar el proyecto
+
+Necesitarás Python 3.12, Node.js, npm y una clave de API de Groq o Gemini.
+
+Abre una terminal en la carpeta del proyecto, crea un entorno virtual e instala las dependencias:
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-```
-
-2. Instala las dependencias:
-
-```powershell
-python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-## Configuracion del LLM
+### 2. Configurar el modelo
 
-La app lee las claves desde la carpeta `envs/`.
-
-### Opcion recomendada: Groq
+Para usar Groq, crea el archivo de configuración a partir de la plantilla:
 
 ```powershell
 Copy-Item envs\groq.env.example envs\groq.env
 ```
 
-Edita `envs/groq.env`:
+Abre `envs/groq.env` y sustituye el valor de `GROQ_API_KEY` por tu clave. El modelo configurado en la plantilla es `openai/gpt-oss-120b`, al que se accede mediante Groq.
 
-```env
-LLM_PROVIDER=groq
-GROQ_API_KEY=tu-api-key
-GROQ_MODEL_NAME=openai/gpt-oss-120b
-```
+Los modelos disponibles y sus límites pueden cambiar, así que conviene revisar la configuración de tu cuenta si una petición falla. No subas tu clave al repositorio: los archivos `envs/*.env` están incluidos en `.gitignore`.
 
-### Opcion alternativa: Gemini
+### 3. Arrancar la aplicación
 
-```powershell
-Copy-Item envs\gemini.env.example envs\gemini.env
-```
-
-Edita `envs/gemini.env`:
-
-```env
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=tu-api-key
-GEMINI_MODEL_NAME=gemini-2.0-flash-001
-```
-
-Los archivos `envs/*.env` estan ignorados por Git para evitar subir claves privadas.
-Los modelos y cuotas de cada proveedor pueden cambiar; si un modelo no esta disponible, configura otro compatible con tu cuenta. El archivo `.env.example` es una referencia: la aplicacion carga los archivos reales de `envs/`.
-
-## Ejecucion
-
-### FastAPI
+Con el entorno virtual activado, inicia la API desde la raíz del proyecto:
 
 ```powershell
 uvicorn backend.main:app --reload --port 8000
 ```
 
-Documentacion interactiva:
-
-```text
-http://localhost:8000/docs
-```
-
-Ejemplos JSON para Postman:
-
-```text
-docs/api_examples/
-```
-
-### React frontend
-
-El frontend React esta en `frontend/` y consume FastAPI mediante el proxy `/api`.
-
-En una terminal, deja FastAPI corriendo en `http://localhost:8000`. En otra terminal:
+Abre otra terminal en la misma carpeta e inicia la interfaz:
 
 ```powershell
 cd frontend
@@ -102,73 +63,21 @@ npm install
 npm run dev
 ```
 
-Despues abre:
+Abre [http://127.0.0.1:5173](http://127.0.0.1:5173) en el navegador y sube un CSV o Excel para empezar. Mantén las dos terminales abiertas mientras uses Wokia.
 
-```text
-http://127.0.0.1:5173
-```
+Los archivos que subas se guardan localmente en `auto_doc/files/` y no se incluyen en el repositorio.
 
-Sube un CSV o Excel desde la pantalla inicial. Los archivos cargados se guardan localmente en `auto_doc/files/`, que Git ignora; no se incluyen datasets de ejemplo en el repositorio.
+## Tecnologías
 
-### Version anterior en Streamlit
+- React y TypeScript para la interfaz.
+- FastAPI y Python para el backend.
+- LangChain y modelos accesibles por API para las tareas del asistente.
+- Pandas, Matplotlib, Seaborn y DoWhy para el análisis, las visualizaciones y la inferencia causal.
 
-```powershell
-streamlit run main.py
-```
+La documentación de la API está disponible en [http://localhost:8000/docs](http://localhost:8000/docs) mientras el backend está en marcha. En `docs/api_examples/` hay ejemplos para probar los endpoints.
 
-## Estructura principal
+## Antes de sacar conclusiones
 
-- `main.py`: entrada de la app y navegacion.
-- `modules/`: paginas de Streamlit.
-- `auto_doc/models/causal_agent.py`: configuracion del LLM y agentes.
-- `auto_doc/causal/`: herramientas auxiliares para DAG, diagnostico y flujo causal.
-- `auto_doc/services/`: carga de archivos, prompts y servicios reutilizables para la API.
-- `backend/`: API FastAPI para datasets, graficos, resumen asistido y flujo causal.
-- `frontend/`: interfaz React conectada a FastAPI.
-- `envs/`: plantillas y archivos locales de API keys.
-- `docs/`: documentacion de uso y notas de version estable.
+Wokia es un proyecto exploratorio: las respuestas del modelo pueden contener errores y conviene revisarlas. En particular, los resultados causales dependen de los datos, el DAG y los supuestos elegidos. Una correlación o una prueba de robustez no demuestran por sí solas que exista causalidad.
 
-## Flujo causal en FastAPI
-
-El flujo causal principal esta disponible como endpoints independientes:
-
-```text
-candidates -> hypotheses -> treatment -> dag -> identify -> method -> estimate -> refute
-```
-
-Partes que usan LLM/agente por defecto:
-
-- `hypotheses`
-- `treatment`
-- `dag`
-- `method`
-- `estimate`
-- `refute`
-
-Partes deterministas:
-
-- `candidates`
-- `identify`
-
-Los endpoints con `use_agent` aceptan `false` para pruebas sin gastar tokens.
-
-## Documentacion
-
-- Guia de uso: `docs/USAGE.md`
-- Version estable: `docs/STABLE_VERSION.md`
-- Baseline Streamlit congelada: `docs/STREAMLIT_BASELINE.md`
-- Backend FastAPI: `docs/BACKEND.md`
-- Ejemplos Postman: `docs/api_examples/` (requieren aportar el dataset correspondiente).
-- Frontend React: `docs/FRONTEND.md`
-
-## Limites del prototipo
-
-Wokia es un proyecto exploratorio, no una herramienta de produccion. Las respuestas del LLM pueden contener errores y deben revisarse. Los resultados causales dependen del DAG, los datos y los supuestos elegidos; una correlacion o una prueba de robustez no demuestran causalidad. No todos los metodos de estimacion son adecuados para cualquier analisis.
-
-La aplicacion ejecuta codigo Python generado por el modelo y admite codigo en algunas peticiones de la API. Ejecutala solo en un entorno local de confianza, sin exponer la API a Internet, y revisa el codigo generado. El tratamiento de datos enviados al LLM depende de la configuracion y condiciones del proveedor: no cargues datos sensibles sin evaluar su uso.
-
-## Wokia en acción
-
-[![Ver demostración de Wokia](docs/images/wokia-demo.png)](https://github.com/user-attachments/assets/b3962a7c-1403-4aeb-af66-5e688cfbdc14)
-
-Haz clic en la imagen para ver la demostración.
+Algunas funciones ejecutan código Python generado por el modelo. Usa la aplicación en un entorno local de confianza, revisa el código generado y evita exponer la API a Internet. Antes de cargar datos sensibles, ten en cuenta que algunas tareas envían información al proveedor del modelo.
